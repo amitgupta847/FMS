@@ -1,0 +1,254 @@
+﻿<inf:ViewBase x:Class="FMS.Modules.BasicInformation.MainDepositsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:inf="clr-namespace:FMS.Infrastructure;assembly=FMS.Infrastructure"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FMS.Modules.BasicInformation"
+             mc:Ignorable="d" 
+             d:DesignHeight="1300" d:DesignWidth="1600">
+    
+    <inf:ViewBase.Resources>
+        <local:IndexConverter x:Key="IndexConverter"/>
+        <local:ShortDateConverter x:Key="ShortDateConverter"/>
+
+        <LinearGradientBrush x:Key="Brush_HeaderBackground" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientStop Color="LightSkyBlue" Offset = "0" />
+            <GradientStop Color="DeepPink" Offset="1" />
+        </LinearGradientBrush>
+
+        <!--Check box list style-->
+        <Style x:Key="CheckBoxListStyle"  TargetType="{x:Type ListBox}">
+            <Setter Property="SelectionMode" Value="Multiple" />
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Background" Value="LightSteelBlue"/>
+                        <Setter Property="Margin" Value="2"/>
+                        <Setter Property="Padding" Value="2"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border  Background="{StaticResource Brush_HeaderBackground}"  BorderBrush="BlanchedAlmond"  BorderThickness="1" CornerRadius="2" Margin="1"  Padding="2"    SnapsToDevicePixels="True" >
+                                        <CheckBox Margin="2"  Focusable="False" IsChecked= "{Binding Path=IsChecked, Mode=TwoWay}">
+                                            <ContentPresenter Margin="2"></ContentPresenter>
+                                        </CheckBox>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Check box wrap list style-->
+        <Style x:Key="CheckBoxHorizontalWrapListStyle"  TargetType="{x:Type ListBox}">
+            <!--<Setter Property="MaxWidth" Value="200" />-->
+            <Setter Property="SelectionMode" Value="Multiple" />
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Background" Value="LightSteelBlue"/>
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="Padding" Value="2"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border  Background="{StaticResource Brush_HeaderBackground}"  BorderBrush="BlanchedAlmond" 
+                                         BorderThickness="1" CornerRadius="30" Margin="1"  Padding="2" SnapsToDevicePixels="True" >
+                                        <CheckBox Margin="5"  Focusable="False"
+                                            IsChecked= "{Binding Path=IsChecked, Mode=TwoWay}">
+                                            <ContentPresenter Margin="1"></ContentPresenter>
+                                        </CheckBox>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel></WrapPanel>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter  Property="ScrollViewer.HorizontalScrollBarVisibility"  Value="Disabled"  />
+        </Style>
+    </inf:ViewBase.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+
+            <TextBlock Grid.Row="0" Text="Deposits" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        FontSize="16" Foreground="DarkBlue" FontWeight="DemiBold"></TextBlock>
+
+            <!--Years Selection-->
+            <ListBox BorderThickness="0" Background="WhiteSmoke"
+                     Margin="0,5,0,5" MinHeight="50" Style="{StaticResource CheckBoxHorizontalWrapListStyle}" 
+                     HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
+                     ItemsSource="{Binding Path=Years}" DisplayMemberPath="Year" />
+           
+            <Menu Margin="1,2,1,2"  FontSize="14" FontWeight="DemiBold">
+                <MenuItem Header="New Deposit" Command="{Binding CreateNewDetailCommand}" CommandParameter="{x:Type local:DepositsDetailView}">
+                    <!--<MenuItem Header="New Friend" Command="{Binding CreateNewDetailCommand}" CommandParameter="{x:Type local:FriendDetailViewModel}" />-->
+                    <!--<MenuItem Header="New Meeting" Command="{Binding CreateNewDetailCommand}" CommandParameter="{x:Type viewModel:MeetingDetailViewModel}" />-->
+                </MenuItem>
+
+                <!--<MenuItem Header="Edit">
+                <MenuItem Header="Programming Languages" Command="{Binding OpenSingleDetailViewCommand}" CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}"/>
+            </MenuItem>-->
+            </Menu>
+        </StackPanel>
+       
+        <xctk:ChildWindow CloseButtonVisibility="Hidden" Grid.Row="1" Caption="Deposit Details" IsModal="True" WindowStartupLocation="Manual" 
+                          MinWidth="800" WindowState= "{Binding WindowState}" >
+
+            <Grid DataContext="{Binding SelectedDetailViewModel}" >
+                   <local:DepositsDetailView></local:DepositsDetailView>
+            </Grid>
+        </xctk:ChildWindow>
+        
+        <!--Grid showing all deposits-->
+        <xctk:BusyIndicator Grid.Row="1" BusyContent="Loading Deposits" IsBusy="{Binding IsBusy}">
+            
+        <DataGrid x:Name="depositWrapperDataGrid" Grid.Row="1" AutoGenerateColumns="False" 
+                  ItemsSource="{Binding DetailViewModels}" SelectedItem="{Binding SelectedDetailViewModel}" AlternatingRowBackground="WhiteSmoke"
+                  RowDetailsVisibilityMode="VisibleWhenSelected" RowHeight="45" 
+                  Margin="0,2" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}">
+
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+            
+                <DataGrid.Columns>
+
+                <DataGridTemplateColumn x:Name="indexColumn"  CanUserSort="True" SortDirection="Ascending" Header="#" MinWidth="30" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  TextAlignment="Center" Padding="5,5" Text="{Binding Path=AlternationIndex,Converter={StaticResource IndexConverter}, 
+                                RelativeSource={RelativeSource AncestorType=DataGridRow}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn x:Name="depositaccountNumberColumn" Header="Deposit Number" MinWidth="200" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="Button_Click">
+                                    <TextBlock Text="{Binding Deposit.DepositAccNumber}" TextDecorations="Underline"
+                                               Padding="5,5"  FontSize="14" Foreground="Blue" FontWeight="DemiBold" />
+                                </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <!--<DataGridHyperlinkColumn x:Name="depositaccountNumberColumn" 
+                                             Binding="{Binding Deposit.DepositAccNumber}" Header="Deposit Number" MinWidth="200" Width="SizeToHeader">
+                    <DataGridHyperlinkColumn.ElementStyle>
+                        <Style>
+                            <EventSetter Event="Hyperlink.Click" Handler="Hyperlink_OnClick"/>
+                        </Style>
+                    </DataGridHyperlinkColumn.ElementStyle>
+                </DataGridHyperlinkColumn>-->
+
+                <DataGridTemplateColumn x:Name="accountIDColumn" Header="Primary Linked Account" MinWidth="200" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                                <TextBlock Padding="5,5"  TextAlignment="Center" Text="{Binding Deposit.PrimaryLinkedAccount.AccountName}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+               <DataGridTemplateColumn x:Name="initialValueColumn" Header="Initial Deposit" MinWidth="150" Width="SizeToHeader">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Padding="5,5" TextAlignment="Right" Text="{Binding Path=Deposit.InitialDeposit}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+                    <DataGridTemplateColumn x:Name="depositDateColumn" Header="Deposit Date" MinWidth="150" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Deposit.DepositDate,Converter={StaticResource ShortDateConverter}}"
+                                       Padding="5,5"  TextAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn x:Name="maturityDateColumn" CanUserSort="True" SortDirection="Ascending" Header="Maturity Date" MinWidth="150" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Deposit.MaturityDate,Converter={StaticResource ShortDateConverter}}"
+                                       Padding="5,5"  TextAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn x:Name="interestColumn" Header="Interest" MinWidth="100" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                                <TextBlock Text="{Binding Deposit.Interest}" Padding="5,5"  TextAlignment="Right"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn x:Name="maturityValueColumn" Header="Maturity Value" MinWidth="150" Width="SizeToHeader">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Deposit.MaturityValue}" Padding="5,5"  TextAlignment="Right"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn x:Name="currentValueColumn" Header="Current Value" MinWidth="150" Width="SizeToHeader">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Deposit.CurrentValue}" Padding="5,5"  TextAlignment="Right"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn x:Name="yearIDColumn" Header="Year" CanUserSort="True" SortDirection="Ascending" MinWidth="100" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                                <TextBlock Text="{Binding Deposit.Year.Year}" Padding="5,5"  TextAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn x:Name="commentColumn" Header="Comment" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                                <TextBlock Text="{Binding Deposit.Comment}" Padding="5,5"  TextAlignment="Justify"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn x:Name="deleteButton" Header="Delete" MinWidth="150" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Margin="8" Content="Delete" 
+                                    Command="{Binding DeleteCommand}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+        </xctk:BusyIndicator>
+    </Grid>
+
+</inf:ViewBase>

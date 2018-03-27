@@ -1,0 +1,12 @@
+﻿<inf:ViewBase x:Class="FMS.Modules.Infrastructure.Toolbar.ToolbarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:inf="clr-namespace:FMS.Infrastructure;assembly=FMS.Infrastructure"
+             xmlns:local="clr-namespace:FMS.Modules.Infrastructure.Toolbar"
+             mc:Ignorable="d" Height="Auto" Width="Auto">
+    <ToolBar HorizontalAlignment="Right">
+        <Button Command="{x:Static inf:ApplicationCommands.SaveAllCommand}" >Save All</Button>
+    </ToolBar>
+</inf:ViewBase>

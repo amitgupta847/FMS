@@ -1,0 +1,212 @@
+﻿<UserControl x:Class="FMS.Modules.BasicInformation.DepositsDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:inf="clr-namespace:FMS.Infrastructure;assembly=FMS.Infrastructure"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FMS.Modules.BasicInformation"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="1200" Loaded="ViewBase_Loaded">
+
+    <UserControl.Resources>
+        <local:IndexConverter x:Key="IndexConverter"/>
+        <local:ShortDateConverter x:Key="ShortDateConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid x:Name="grid1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="10" Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition MinWidth="200" Width="Auto"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+                <RowDefinition MinHeight="40" Height="Auto"/>
+               
+                <RowDefinition Height="10"/>
+            </Grid.RowDefinitions>
+            <Label Content="Deposit Number" Grid.Column="1" Grid.Row="0"
+                   FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <TextBox x:Name="accountNumberTextBox" Grid.Column="1" Margin="3" Grid.Row="1"  
+                     Text="{Binding Deposit.DepositAccNumber, Mode=TwoWay, NotifyOnValidationError=true, 
+                     ValidatesOnExceptions=true}"/>
+
+            <Label Content="Primary Linked Account" Grid.Column="1" Grid.Row="2" 
+                   FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <ComboBox x:Name="bankIDComboBox" Grid.Column="1" DisplayMemberPath="AccountName" 
+                      ItemsSource="{Binding PrimaryAccounts}" Margin="3" Grid.Row="3" 
+                      SelectedItem="{Binding SelectedPrimaryAccount, Mode=TwoWay}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+            </ComboBox>
+
+            <Label Content="Initial Deposit" Grid.Column="1" Grid.Row="4" 
+                   FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <TextBox x:Name="depositTextBox" Grid.Column="1" Margin="3" Grid.Row="5" 
+                     Text="{Binding Deposit.InitialDeposit, Mode=TwoWay, NotifyOnValidationError=true, 
+                     ValidatesOnExceptions=true}"/>
+
+            <Label Content="Interest" Grid.Column="1" Grid.Row="6" 
+                   FontWeight="DemiBold" VerticalAlignment="Center" />
+            <TextBox x:Name="interestTextBox" Grid.Column="1" Margin="3" Grid.Row="7" 
+                     Text="{Binding Deposit.Interest, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, 
+                     NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+
+            <Label Content="Deposit Date" Grid.Column="1"  Grid.Row="8" 
+                   FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <DatePicker x:Name="date_Acc_OpenDatePicker" Grid.Column="1" Margin="3" Grid.Row="9" 
+                        SelectedDate="{Binding Deposit.DepositDate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+
+            <Label Content="Maturity Period" Grid.Column="1" Grid.Row="10" 
+                   FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <StackPanel Margin="3,0,0,3" Grid.Column="1" Grid.Row="11"  Orientation="Horizontal">
+                <!--<DatePicker x:Name="date_MaturityDatePicker" Grid.Column="1" Margin="3" Grid.Row="5" 
+                        SelectedDate="{Binding Deposit.MaturityDate, Mode=TwoWay, NotifyOnValidationError=true,
+                    ValidatesOnExceptions=true}"/>-->
+                <TextBox x:Name="month" Margin="3"  Width="50"
+                     Text="{Binding Deposit.Months, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+                <Label Content="Months" HorizontalAlignment="Left" Margin="3,7,20,7"  />
+
+                <Label Content="or" FontWeight="DemiBold" HorizontalAlignment="Left" Margin="3,7,25,7"  />
+
+                <TextBox x:Name="days" Margin="3" Grid.Row="3" Width="50"
+                     Text="{Binding Deposit.Days, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay,NotifyOnValidationError=true , ValidatesOnExceptions=true}" />
+
+                <Label Content="Days" HorizontalAlignment="Left" Margin="3,7,0,7"  />
+
+            </StackPanel>
+
+
+            <Label Content="Comment" Grid.Column="1" Grid.Row="12" FontWeight="DemiBold" VerticalAlignment="Center"/>
+            <TextBox x:Name="comment_txtBox" Grid.Column="1" Margin="3" Grid.Row="13" 
+                     Grid.RowSpan="2"
+                     Text="{Binding Deposit.Comment, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+                     TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True" 
+                     VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+
+            <StackPanel Margin="0,5,1,5" Grid.Row="16" Grid.Column="1" Orientation="Horizontal" 
+                        HorizontalAlignment="Right">
+                <Button Width="75" Margin="10,0" Command="{Binding SaveCommand}" >Save</Button>
+                <Button Width="75" Command="{Binding CloseDetailViewCommand}">Close</Button>
+            </StackPanel>
+
+<!--Amount Summary-->
+
+            <StackPanel Margin="0,5,1,5" Grid.Row="4" Grid.Column="3"
+                        Grid.RowSpan="6" Background="MidnightBlue">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <!--<ColumnDefinition />-->
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition MinHeight="40" Height="Auto"/>
+                        <RowDefinition MinHeight="40" Height="Auto"/>
+                        <RowDefinition MinHeight="40" Height="Auto"/>
+                        <RowDefinition MinHeight="40" Height="Auto"/>
+                        <RowDefinition MinHeight="40" Height="Auto"/>
+                        <RowDefinition MinHeight="40" Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Foreground="White"  Content="Maturity Date" Grid.Column="0"  Grid.Row="0"
+                           Margin="10 10 10 0" HorizontalAlignment="Center"/>
+                    <TextBlock Foreground="White" FontSize="16" Grid.Column="0"  Grid.Row="1"
+                               HorizontalAlignment="Center" Margin="10 0 10 10" TextAlignment="Left"
+                               Text="{Binding Deposit.MaturityDate,Converter={StaticResource ShortDateConverter}}"/>
+
+                    <Label Foreground="White"  FontWeight="Bold" Content="Maturity Value" HorizontalAlignment="Center"
+                           Grid.Column="0"  Grid.Row="2" Margin="10 10 10 0" />
+                    <TextBlock Foreground="White" FontSize="18"  Grid.Column="0" Grid.Row="3" 
+                               HorizontalAlignment="Center" Margin="10 0 10 10"
+                               Text="{Binding Deposit.MaturityValue}"/>
+
+                    <Label Foreground="White"  Content="Current Value" Grid.Column="0"  Grid.Row="4"
+                           Margin="10 10 10 0" HorizontalAlignment="Center"/>
+                    <TextBlock Foreground="White" FontSize="16" Grid.Column="0"  Grid.Row="5"
+                               HorizontalAlignment="Center" Margin="10 0 10 10"
+                               Text="{Binding Deposit.CurrentValue}"/>
+
+                    <!--<Label Content="Interest:" Grid.Column="0" HorizontalAlignment="Left" Margin="3,5,0,6" Grid.Row="3" VerticalAlignment="Center" />
+                    <TextBox  Grid.Column="1" Margin="3" Grid.Row="3" 
+                     Text="{Binding Deposit.Interest, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+                     Grid.RowSpan="2"/>-->
+                </Grid>
+            </StackPanel>
+
+                
+            <!--Cummulative/Grid/Chart-->
+            <StackPanel Grid.Column="5" Grid.RowSpan="15"  Background="White">
+                <TextBlock Text="Summary" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                <TextBlock></TextBlock>
+                <DataGrid x:Name="depositWrapperDataGrid" Grid.Row="1" AutoGenerateColumns="False" 
+                  ItemsSource="{Binding DetailViewModels}" SelectedItem="{Binding SelectedDetailViewModel}" 
+                  RowDetailsVisibilityMode="VisibleWhenSelected" RowHeight="50" 
+                  Margin="10"
+                  AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}">
+                    <DataGrid.Columns>
+
+                        <DataGridTemplateColumn x:Name="indexColumn" Header="#" MinWidth="30" Width="SizeToHeader">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=AlternationIndex,Converter={StaticResource IndexConverter}, 
+                                RelativeSource={RelativeSource AncestorType=DataGridRow}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+            
+                        <DataGridTemplateColumn x:Name="depositDateColumn" Header="Year" MinWidth="100" Width="SizeToHeader">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Deposit.DepositDate,Converter={StaticResource ShortDateConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn x:Name="maturityDateColumn" Header="Cummulative Investment" MinWidth="150" Width="SizeToHeader">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Deposit.MaturityDate,Converter={StaticResource ShortDateConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn x:Name="interestColumn" Header="Cummulative Interest" MinWidth="150" Width="SizeToHeader">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Deposit.Interest}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </StackPanel>
+        </Grid>
+    </Grid>
+
+</UserControl>

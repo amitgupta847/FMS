@@ -26,9 +26,9 @@
         </Style>
     </UserControl.Resources>
     <Grid  Margin="5">
-        <Button Command="{x:Static inf:ApplicationCommands.NavigateCommand}" 
+        <Button  Command="{x:Static inf:ApplicationCommands.NavigateCommand}" 
                  Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                Foreground="White" FontSize="14" Margin="5,0,5,0" 
+                Foreground="White" FontSize="14" 
                 CommandParameter="{x:Type local:InterestCalculatorView}">Utilities</Button>
     </Grid>
 </UserControl>

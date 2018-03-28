@@ -18,7 +18,7 @@
                        Text="{Binding Title}" VerticalAlignment="Center"/>
 
             <Grid  x:Name="grid1" Margin="20"  VerticalAlignment="Stretch" HorizontalAlignment="Center"
-                   Background="LightSteelBlue">
+                   Background="WhiteSmoke">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>

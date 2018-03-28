@@ -6,6 +6,7 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FMS.Modules.BasicInformation"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              mc:Ignorable="d" 
              d:DesignHeight="1300" d:DesignWidth="1600">
 
@@ -48,7 +49,8 @@
             <DataGrid Grid.Row="1" x:Name="accountWrapperDataGrid" AutoGenerateColumns="False" 
                   EnableRowVirtualization="True" RowHeight="45" Margin="0,2" RowDetailsVisibilityMode="VisibleWhenSelected"
                   ItemsSource="{Binding DetailViewModels}" SelectedItem="{Binding SelectedDetailViewModel}"
-                  AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}">
+                  AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}"
+                      Style="{StaticResource AzureDataGrid}">
 
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">

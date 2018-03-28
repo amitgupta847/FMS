@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FMS.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace FMS.Infrastructure
 {
     public interface IMessageDialogService
     {
-        MessageDialogResult ShowOkCancelDialog(string text, string title);
+        Task<MessageDialogResult> ShowOkCancelDialogAsync(string text, string title);
 
-        void ShowInfoDialog(string text);
+        Task ShowInfoDialogAsync(string text);
     }
 }

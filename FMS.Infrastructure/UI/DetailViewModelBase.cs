@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace FMS.Infrastructure
@@ -20,6 +21,7 @@ namespace FMS.Infrastructure
         public DetailViewModelBase(IEventAggregator eventAggregator,
           IMessageDialogService messageDialogService)
         {
+            
             EventAggregator = eventAggregator;
             MessageDialogService = messageDialogService;
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
@@ -104,11 +106,11 @@ namespace FMS.Infrastructure
               });
         }
 
-        protected virtual void OnCloseDetailViewExecute()
+        protected async virtual void OnCloseDetailViewExecute()
         {
             if (HasChanges)
             {
-                var result = MessageDialogService.ShowOkCancelDialog(
+                var result =await MessageDialogService.ShowOkCancelDialogAsync(
                   "You've made changes. Close this item?", "Question");
                 if (result == MessageDialogResult.Cancel)
                 {

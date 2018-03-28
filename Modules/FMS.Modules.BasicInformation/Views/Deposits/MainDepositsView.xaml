@@ -7,12 +7,15 @@
              xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FMS.Modules.BasicInformation"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              mc:Ignorable="d" 
              d:DesignHeight="1300" d:DesignWidth="1600">
     
     <inf:ViewBase.Resources>
         <local:IndexConverter x:Key="IndexConverter"/>
         <local:ShortDateConverter x:Key="ShortDateConverter"/>
+
+   
 
         <LinearGradientBrush x:Key="Brush_HeaderBackground" StartPoint="0.5,0" EndPoint="0.5,1">
             <GradientStop Color="LightSkyBlue" Offset = "0" />
@@ -51,14 +54,12 @@
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
                     <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="Background" Value="LightSteelBlue"/>
                         <Setter Property="Margin" Value="5"/>
                         <Setter Property="Padding" Value="2"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border  Background="{StaticResource Brush_HeaderBackground}"  BorderBrush="BlanchedAlmond" 
-                                         BorderThickness="1" CornerRadius="30" Margin="1"  Padding="2" SnapsToDevicePixels="True" >
+                                    <Border  Margin="1"  Padding="2" SnapsToDevicePixels="True" >
                                         <CheckBox Margin="5"  Focusable="False"
                                             IsChecked= "{Binding Path=IsChecked, Mode=TwoWay}">
                                             <ContentPresenter Margin="1"></ContentPresenter>
@@ -121,8 +122,9 @@
         <xctk:BusyIndicator Grid.Row="1" BusyContent="Loading Deposits" IsBusy="{Binding IsBusy}">
             
         <DataGrid x:Name="depositWrapperDataGrid" Grid.Row="1" AutoGenerateColumns="False" 
-                  ItemsSource="{Binding DetailViewModels}" SelectedItem="{Binding SelectedDetailViewModel}" AlternatingRowBackground="WhiteSmoke"
+                  ItemsSource="{Binding DetailViewModels}" SelectedItem="{Binding SelectedDetailViewModel}" 
                   RowDetailsVisibilityMode="VisibleWhenSelected" RowHeight="45" 
+                  Style="{StaticResource AzureDataGrid}"
                   Margin="0,2" AlternationCount="{Binding Items.Count, RelativeSource={RelativeSource Self}}">
 
                 <DataGrid.ColumnHeaderStyle>
@@ -240,9 +242,9 @@
                 <DataGridTemplateColumn x:Name="deleteButton" Header="Delete" MinWidth="150" Width="SizeToHeader">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Margin="8" Content="Delete" 
+                                <Button Margin="8" Content="Delete" MinWidth="100" 
                                     Command="{Binding DeleteCommand}"/>
-                        </DataTemplate>
+                            </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 

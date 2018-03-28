@@ -121,9 +121,9 @@ namespace FMS.Modules.BasicInformation
             return (Deposit != null && Deposit.ID > 0);
         }
 
-        protected override void OnDeleteExecute()
+        protected async override void OnDeleteExecute()
         {
-            if (MessageDialogService.ShowOkCancelDialog("Do you really want to delete the deposit information?", "Delete Deposit") == MessageDialogResult.OK)
+            if (await MessageDialogService.ShowOkCancelDialogAsync("Do you really want to delete the deposit information?", "Delete Deposit") == MessageDialogResult.OK)
             {
                 DeleteDepositInfo();
             }
@@ -150,7 +150,7 @@ namespace FMS.Modules.BasicInformation
 
                 Deposit.YearID = Years[0].ID;
                 
-                var result = await Task.Run(() =>
+                var result = await Task.Run(async () =>
                 {
                     int idValue = 0;
                     try
@@ -159,7 +159,7 @@ namespace FMS.Modules.BasicInformation
                     }
                     catch (Exception ex)
                     {
-                        MessageDialogService.ShowInfoDialog($"Error Occured: { ex.Message}");
+                       await MessageDialogService.ShowInfoDialogAsync($"Error Occured: { ex.Message}");
                     }
                     return idValue;
                 });
@@ -170,7 +170,7 @@ namespace FMS.Modules.BasicInformation
                     this.Id = result;
 
                     RaiseDetailSavedEvent(Deposit.ID, $"{Deposit.DepositAccNumber}");
-                    MessageDialogService.ShowInfoDialog($"Deposit Information Saved For: { Deposit.DepositAccNumber}");
+                  await  MessageDialogService.ShowInfoDialogAsync($"Deposit Information Saved For: { Deposit.DepositAccNumber}");
                 }
 
                 Deposit.SetFinalCalculatedValues();
@@ -181,7 +181,7 @@ namespace FMS.Modules.BasicInformation
         {
             if (Deposit != null)
             {
-                var result = await Task.Run(() =>
+                var result = await Task.Run(async () =>
                 {
                     int idValue = 0;
                     try
@@ -190,7 +190,7 @@ namespace FMS.Modules.BasicInformation
                     }
                     catch (Exception ex)
                     {
-                        MessageDialogService.ShowInfoDialog($"Error Occured: { ex.Message}");
+                        await MessageDialogService.ShowInfoDialogAsync($"Error Occured: { ex.Message}");
                     }
                     return idValue;
                 });
@@ -198,7 +198,7 @@ namespace FMS.Modules.BasicInformation
                 if (result > 0)
                 {
                     RaiseDetailDeletedEvent(this.Id); // here we pass the id of view model, (which is same the object it wrapping)
-                    MessageDialogService.ShowInfoDialog($"Deposit Information Deleted For: { Deposit.DepositAccNumber}");
+                   await MessageDialogService.ShowInfoDialogAsync($"Deposit Information Deleted For: { Deposit.DepositAccNumber}");
                 }
             }
         }

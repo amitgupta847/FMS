@@ -113,9 +113,9 @@ namespace FMS.Modules.BasicInformation
             return (Account != null && Account.ID > 0);
         }
 
-        protected override void OnDeleteExecute()
+        protected async override void OnDeleteExecute()
         {
-            if (MessageDialogService.ShowOkCancelDialog("Do you really want to delete the account information?", "Delete Account") == MessageDialogResult.OK)
+            if (await MessageDialogService.ShowOkCancelDialogAsync("Do you really want to delete the account information?", "Delete Account") == MessageDialogResult.OK)
             {
                 DeleteAccountInfo();
             }
@@ -139,7 +139,7 @@ namespace FMS.Modules.BasicInformation
                 //otherwise EF insert navigation properties as new objects in disconnected approach
                 Account.BankID = SelectedLinkedBank.Model.ID;
 
-                var result = await Task.Run(() =>
+                var result = await Task.Run(async () =>
                 {
                     int idValue = 0;
                     try
@@ -148,7 +148,7 @@ namespace FMS.Modules.BasicInformation
                     }
                     catch (Exception ex)
                     {
-                        MessageDialogService.ShowInfoDialog($"Error Occured: { ex.Message}");
+                        await MessageDialogService.ShowInfoDialogAsync($"Error Occured: { ex.Message}");
                     }
                     return idValue;
                 });
@@ -159,7 +159,7 @@ namespace FMS.Modules.BasicInformation
                     this.Id = result;
 
                     RaiseDetailSavedEvent(Account.ID, $"{Account.AccountNumber}");
-                    MessageDialogService.ShowInfoDialog($"Account Information Saved For: { Account.AccountNumber}");
+                    await MessageDialogService.ShowInfoDialogAsync($"Account Information Saved For: { Account.AccountNumber}");
                 }
             }
         }
@@ -168,7 +168,7 @@ namespace FMS.Modules.BasicInformation
         {
             if (Account != null)
             {
-                var result = await Task.Run(() =>
+                var result = await Task.Run(async () =>
                 {
                     bool isSuccess = false;
                     try
@@ -177,7 +177,7 @@ namespace FMS.Modules.BasicInformation
                     }
                     catch (Exception ex)
                     {
-                        MessageDialogService.ShowInfoDialog($"Error Occured: { ex.Message}");
+                       await MessageDialogService.ShowInfoDialogAsync($"Error Occured: { ex.Message}");
                     }
                     return isSuccess;
                 });
@@ -185,7 +185,7 @@ namespace FMS.Modules.BasicInformation
                 if (result)
                 {
                     RaiseDetailDeletedEvent(this.Id); // here we pass the id of view model, (which is same the object it wrapping)
-                    MessageDialogService.ShowInfoDialog($"Account Information Deleted For: { Account.AccountNumber}");
+                    await MessageDialogService.ShowInfoDialogAsync($"Account Information Deleted For: { Account.AccountNumber}");
                 }
             }
         }
